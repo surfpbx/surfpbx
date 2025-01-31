@@ -172,7 +172,7 @@ class SurfRedOx(RedOx):
     def __init__(self, combo,
                  T=298.15,
                  reference='SHE',
-                 correct_conc=False,
+                 correct_conc=True,
                  size=1):
 
         self.species = combo
@@ -328,6 +328,7 @@ class SurfacePourbaix(Pourbaix):
 
         solid, aqueous = convert_refs(solid_refs, aqueous_refs, bulk_ions, size)
         self.material = solid.pop(target)
+        print(self.material.natoms)
 
         self.phases, phase_matrix = self.get_surface_phases(solid, aqueous)
         self._const = phase_matrix[:, 0]
@@ -433,16 +434,17 @@ class SurfacePourbaixDiagram(PourbaixDiagram):
 
         fig = ax.get_figure()
 
-        ax, colorbar = self._draw_diagram_axes(
+        colorbar = self._draw_diagram_axes(
             cap,
             normalize,
             include_text,
             include_water,
             labeltype, cmap,
             ax=ax)
+        print(colorbar)
 
         if normalize:
-            colorbar.ax.set_ylabel(r'$\Delta G_{pbx}$ (eV/f.u.)')
+            colorbar[0].set_ylabel(r'$\Delta G_{pbx}$ (eV/f.u.)')
 
         if filename is not None:
             fig.savefig(filename)
